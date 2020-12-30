@@ -8,11 +8,9 @@ import com.example.projet4a.data.DatabaseDAO
 import com.example.projet4a.data.UserRepository
 import com.example.projet4a.domaine.CreateUserUseCase
 import com.example.projet4a.domaine.GetUserUseCase
-import com.example.projet4a.domaine.User
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module
 import org.koin.dsl.module
-import kotlin.math.sin
 
 val presentationModule = module {
     factory { MainViewModel(get(), get())

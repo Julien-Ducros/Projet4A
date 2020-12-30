@@ -6,10 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.projet4a.domaine.CreateUserUseCase
 import com.example.projet4a.domaine.GetUserUseCase
-import com.example.projet4a.domaine.User
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class MainViewModel(
@@ -17,26 +16,29 @@ class MainViewModel(
     private val getUserUseCase: GetUserUseCase
 )  : ViewModel(){
 
-    val text: MutableLiveData<String> = MutableLiveData()
 
-    init {
-        text.value = "Pokédex"
+    val loginLiveData: MutableLiveData<LoginStatus> = MutableLiveData()
 
-    }
-    fun onClickedIncrement(emailUser: String) {
+    fun onClickedLogin(emailUser: String, passwordUser: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            createUserUseCase.invoke(User("test"))
-           val user = getUserUseCase.invoke("test")
-
+            val user = getUserUseCase.invoke(emailUser, passwordUser)
+           val loginStatus = if (user != null && passwordUser != null) {
+                    LoginSuccess(user.email, passwordUser.password )
+            } else {
+                LoginError
+            }
+            withContext(Dispatchers.Main){
+            loginLiveData.value=loginStatus }
         }
 
-        //counter.value = (counter.value ?: 0) +1
+
     }
     }
 
+//createUserUseCase.invoke(User("test"))
+// val user = getUserUseCase.invoke("test")
 
-
-
+//counter.value = (counter.value ?: 0) +1
 
 
 
